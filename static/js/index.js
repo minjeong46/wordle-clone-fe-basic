@@ -2,8 +2,6 @@ let index = 0;
 let attempts = 0; // 시도 횟수
 let timer;
 
-const 정답 = "APPLE";
-
 function appStart() {
     const displayGameOver = () => {
         // const div = document.createElement('div');
@@ -21,14 +19,22 @@ function appStart() {
     };
 
     const gameOver = () => {
-        displayGameOver();
+        GameOver();
         window.removeEventListener("keydown", handleKeyDown);
         clearInterval(timer);
     };
 
     // 5개 입력 후 엔터 누른 후
-    const handleEnterKey = () => {
+    const handleEnterKey = async() => {
         let 맞은갯수 = 0;
+        const 응답 = await fetch('/answer'); // answer로 응답 요청보내서 받고
+        const 정답_객체 = await 응답.json(); // 그 값을 json으로 바꿔줌 -> 객체 형태 (서버에서 객체로 내보내서)
+        const 정답 = 정답_객체.answer;
+
+        console.log(응답);
+        console.log(정답_객체);
+        console.log(정답);
+
         for (let i = 0; i < 5; i++) {
             const block = document.querySelector(
                 `.board-block[data-index='${attempts}${i}']`
